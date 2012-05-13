@@ -5,4 +5,7 @@ release.properties
 .idea
 *.iml
 derby.log
-nul
+.project
+.mymetadata
+.classpath
+.settings

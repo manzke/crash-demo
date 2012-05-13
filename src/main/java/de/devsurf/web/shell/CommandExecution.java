@@ -1,4 +1,4 @@
-package org.crsh.web;
+package de.devsurf.web.shell;
 
 import org.crsh.shell.ShellProcess;
 import org.crsh.shell.ShellProcessContext;

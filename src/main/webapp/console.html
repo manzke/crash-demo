@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Crash Console</title>
+
+<link rel="stylesheet" type="text/css" href="css/console.css" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.console.js"></script>
+
+<script type="text/javascript">
+	var base = "api/shell.json/";
+	$(document)
+			.ready(
+					function() {
+
+						// Get welcome message
+						$
+								.ajax({
+									url : base + "welcome",
+									async : false,
+									dataType : "html",
+									success : function(data) {
+										$("#console")
+												.console(
+														{
+															promptLabel : "% ",
+															autofocus : true,
+															welcomeMessage : data
+																	+ "\n\nType 'help' to show the available commands",
+															commandHandle : function(
+																	line,
+																	report) {
+																$
+																		.ajax({
+																			url : base
+																					+ "execute",
+																			dataType : "html",
+																			data : $
+																					.param({
+																						line : line
+																					}),
+																			success : function(
+																					data) {
+																				report(data)
+																			},
+																			error : function(
+																					data) {
+																				report("an unexpected error occured")
+																			}
+																		});
+															},
+															cancelHandle : function() {
+																$
+																		.ajax({
+																			url : base
+																					+ "cancel"
+																		});
+															},
+															completeHandle : function(
+																	prefix) {
+																var ret = {};
+																$
+																		.ajax({
+																			url : base
+																					+ "complete",
+																			dataType : "json",
+																			async : false,
+																			data : $
+																					.param({
+																						prefix : prefix
+																					}),
+																			success : function(
+																					data) {
+																				ret = data;
+																			}
+																		});
+																return ret;
+															}
+														});
+									}
+								});
+					})
+</script>
+
+</head>
+<body>
+	<div id="console" class="console"></div>
+</body>
+</html>
